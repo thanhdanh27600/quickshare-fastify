@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start-once": "node index.js",
-    "start":"pm2 start -n quickshare_fastify npm -- start",
+    "start": "node index.js",
+    "start-pm2":"pm2 start -n quickshare_fastify npm -- start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
