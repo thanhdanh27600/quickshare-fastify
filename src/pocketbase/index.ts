@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import { POCKETBASE_URL } from '../utils/config.js';
+import { POCKETBASE_URL } from '../utils/config';
 
 const pb = new PocketBase(POCKETBASE_URL);
 

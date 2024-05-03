@@ -1,23 +1,35 @@
 import clsx from 'clsx';
-import { pb } from './pocketbase/index.js';
-import Fastify from 'fastify'
-import { PORT } from './utils/config.js';
+import { pb } from './pocketbase';
+import Fastify, { FastifyInstance, FastifyRequest } from 'fastify'
+import { PORT } from './utils/config';
 import cors from '@fastify/cors'
+import path from 'path';
+import fastifyStatic from '@fastify/static';
+import fastifyView from '@fastify/view';
+import ejs from 'ejs';
 
 const fastify = Fastify({
-    logger: true
+  logger: true,
 });
 fastify.register(cors)
-
-
-fastify.get('/', (request, reply) => {
-    reply.send('Hello, world!');
+fastify.register(fastifyStatic, {
+  root: path.join(__dirname, 'public'),
+});
+fastify.register(fastifyView, {
+  engine: {
+    ejs
+  },
+  root: path.join(__dirname, 'views'),
 });
 
-fastify.get('/post', async function (request, reply) {
-    // fetch a paginated records list
-    const title = request.query['title'];
-    const slug = request.query['slug'];
+fastify.get('/', async (request, reply) => {
+  return reply.view('index.ejs', { message: 'Hello, World!' });
+});
+
+fastify.get('/post', async function (request: FastifyRequest, reply) {
+    const query = request.query as {};
+    const title = query['title'];
+    const slug = query['slug'];
     const resultList = await pb.collection('post').getList(1, 10, {
         filter: clsx({
             [`title~"${title}"`]: !!title
@@ -32,7 +44,8 @@ fastify.get('/post', async function (request, reply) {
 
 
 fastify.get('/post/:id', async function (request, reply) {
-    const id = request.params['id'];
+    const params = request.params as {};
+    const id = params['id'];
     const record = await pb.collection('post').getOne(id, {
         expand: 'thumbnail'
     });
@@ -41,8 +54,8 @@ fastify.get('/post/:id', async function (request, reply) {
 
 fastify.listen({
     host: '0.0.0.0',
-    port: PORT
-}, (err) => {
+    port: PORT as any || 3000,
+},(err) => {
     if (err) {
         console.error(err);
         process.exit(1);
