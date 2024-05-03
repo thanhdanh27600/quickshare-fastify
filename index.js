@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { pb } from './pocketbase/index.js';
 import Fastify from 'fastify'
+import { PORT } from './utils/config.js';
 
 const fastify = Fastify({
     logger: true
@@ -36,10 +37,11 @@ fastify.get('/post/:id', async function (request, reply) {
     reply.send(record);
 });
 
-fastify.listen(3000, 'localhost', (err) => {
+fastify.listen(PORT || 3000, 'localhost', (err) => {
     if (err) {
         console.error(err);
         process.exit(1);
     }
-    console.log('Server running at http://localhost:3000/');
+    if (!PORT) console.warn('PORT not found.')
+    console.log(`Server running at http://localhost:${PORT || 3000}/`);
 });
