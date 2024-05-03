@@ -13,13 +13,13 @@ const fastify = Fastify({
 });
 fastify.register(cors)
 fastify.register(fastifyStatic, {
-  root: path.join(__dirname, 'public'),
+  root: path.join(__dirname, '../public'),
 });
 fastify.register(fastifyView, {
   engine: {
     ejs
   },
-  root: path.join(__dirname, 'views'),
+  root: path.join(__dirname, '../views'),
 });
 
 fastify.get('/', async (request, reply) => {
