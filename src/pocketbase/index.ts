@@ -1,4 +1,4 @@
-import PocketBase from 'pocketbase';
+const PocketBase = require('pocketbase/cjs');
 import { POCKETBASE_URL } from '../utils/config';
 
 const pb = new PocketBase(POCKETBASE_URL);

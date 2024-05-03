@@ -17,14 +17,14 @@
     "@fastify/cors": "^9.0.1",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
-    "pocketbase": "^0.21.2",
+    "ejs": "^3.1.10",
     "fastify": "^4.26.2",
-    "ejs": "^3.1.10"
-
+    "pocketbase": "^0.21.2"
   },
   "devDependencies": {
     "@fastify/static": "^7.0.3",
     "@fastify/view": "^9.1.0",
+    "@types/ejs": "^3.1.5",
     "@types/node": "^20.12.8",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
