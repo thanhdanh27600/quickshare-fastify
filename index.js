@@ -2,10 +2,12 @@ import clsx from 'clsx';
 import { pb } from './pocketbase/index.js';
 import Fastify from 'fastify'
 import { PORT } from './utils/config.js';
+import cors from '@fastify/cors'
 
 const fastify = Fastify({
     logger: true
 });
+fastify.register(cors)
 
 
 fastify.get('/', (request, reply) => {
@@ -37,11 +39,15 @@ fastify.get('/post/:id', async function (request, reply) {
     reply.send(record);
 });
 
-fastify.listen(PORT || 3000, 'localhost', (err) => {
+fastify.listen({
+    host: '0.0.0.0',
+    port: PORT
+}, (err) => {
     if (err) {
         console.error(err);
         process.exit(1);
     }
     if (!PORT) console.warn('PORT not found.')
     console.log(`Server running at http://localhost:${PORT || 3000}/`);
-});
+    pb.health.check().then(data => console.log('Pocketbase', data)).catch(error => console.error('Pocketbase', error));
+})
