@@ -1,8 +1,9 @@
 import amqp from 'amqplib/callback_api';
+import { QUEUE_URL } from '../utils/config';
 
 export const startQueueWorker = async (): Promise<void> => {
   const connection = await new Promise<amqp.Connection>((resolve, reject) => {
-    amqp.connect('amqp://localhost', (error, conn) => {
+    amqp.connect(QUEUE_URL, (error, conn) => {
       if (error) {
         reject(error);
       } else {

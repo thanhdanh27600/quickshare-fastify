@@ -8,6 +8,7 @@ import { pb } from './pocketbase';
 import postRouter from './router/post.router';
 import { DEPLOY_URL, PORT } from './utils/config';
 import { ERROR403 } from './utils/error';
+import { startQueueWorker } from './queue/rabbitmq';
 
 const fastify = Fastify({
   logger: true,
@@ -21,6 +22,11 @@ fastify.register(fastifyView, {
     ejs
   },
   root: path.join(__dirname, '../views'),
+});
+
+// Queue
+startQueueWorker().catch((error)=>{
+  console.error('Queue Error',error)
 });
 
 // Routes
