@@ -7,6 +7,7 @@ import path from 'path';
 import { pb } from './pocketbase';
 import postRouter from './router/post.router';
 import { DEPLOY_URL, PORT } from './utils/config';
+import { ERROR403 } from './utils/error';
 
 const fastify = Fastify({
   logger: true,
@@ -32,6 +33,10 @@ fastify.get('/', async (request, reply) => {
 
 fastify.post('/api/deploy/:secret', async (request, reply) => {
   let secret = request.params['secret'];
+  const ref = request.body['ref'];
+  if(!["refs/heads/master"].includes(ref)){
+    return reply.status(ERROR403.statusCode).send(ERROR403.message);
+  }
   const rs = await fetch(DEPLOY_URL,
     {
       headers: {
