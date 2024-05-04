@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { pb } from './pocketbase';
 import Fastify, { FastifyInstance, FastifyRequest } from 'fastify'
-import { PORT } from './utils/config';
+import { DEPLOY_AUTH, DEPLOY_URL, PORT } from './utils/config';
 import cors from '@fastify/cors'
 import path from 'path';
 import fastifyStatic from '@fastify/static';
@@ -32,15 +32,30 @@ fastify.get('/', async (request, reply) => {
   return reply.view('index.ejs', { message: 'Hello, World!' });
 });
 
+fastify.post('/api/deploy', async (request, reply) => {
+  const body = JSON.parse(request.body as any);
+  console.log(body);
+  const secret = (body)['hook']?.['config']?.['secret'];
+  console.log('secret', secret);
+  const rs = await fetch(DEPLOY_URL,
+    {
+      headers: {
+        'Authorization': `Bearer ${DEPLOY_AUTH}`
+      }
+    })
+  console.log(await rs.json());
+  return reply.send('OK')
+})
+
 fastify.listen({
-    host: '0.0.0.0',
-    port: PORT as any || 3000,
-},(err) => {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
-    if (!PORT) console.warn('PORT not found.')
-    console.log(`Server running at http://localhost:${PORT || 3000}/`);
-    pb.health.check().then(data => console.log('Pocketbase', data)).catch(error => console.error('Pocketbase', error));
+  host: '0.0.0.0',
+  port: PORT as any || 3000,
+}, (err) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  if (!PORT) console.warn('PORT not found.')
+  console.log(`Server running at http://localhost:${PORT || 3000}/`);
+  pb.health.check().then(data => console.log('Pocketbase', data)).catch(error => console.error('Pocketbase', error));
 })
