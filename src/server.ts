@@ -23,27 +23,13 @@ fastify.register(fastifyView, {
   },
   root: path.join(__dirname, '../views'),
 });
-fastify.setErrorHandler(function (error, request, reply) {
-  // Log error
-  this.log.error(error)
-  // Send error response
-  reply.status(ERROR500.statusCode).send(ERROR500.message)
-})
 
 // Routes
 fastify.register(postRouter, { prefix: '/api/post' })
 
+// Views
 fastify.get('/', async (request, reply) => {
   return reply.view('index.ejs', { message: 'Hello, World!' });
-});
-
-fastify.get('/post/:id', async function (request, reply) {
-    const params = request.params as {};
-    const id = params['id'];
-    const record = await pb.collection('post').getOne(id, {
-        expand: 'thumbnail'
-    });
-    reply.send(record);
 });
 
 fastify.listen({

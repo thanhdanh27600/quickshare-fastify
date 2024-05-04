@@ -8,7 +8,6 @@ export const getManyPostSchema = {
 }
 
 export const getOnePostSchema = {
-    query: S.object().prop('slug', S.string().required()),
-    params: S.object().id('id'),
+    params: S.object().prop('slug', S.string().required()),
     headers: S.object(),
 }

@@ -22,8 +22,8 @@ export const getManyPost = async (request: FastifyRequest, reply: FastifyReply) 
 
 export const getOnePost = async (request: FastifyRequest, reply: FastifyReply) => {
     const params = request.params;
-    const id = params['id'];
-    const record = await pb.collection('post').getOne(id, {
+    const slug = params['slug'];
+    const record = await pb.collection('post').getFirstListItem(`slug="${slug}"`,{
         expand: 'thumbnail'
     });
     reply.send(record);

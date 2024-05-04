@@ -12,7 +12,7 @@ async function postRouter(fastify: FastifyInstance) {
   })
   fastify.route({
     method: 'get',
-    url: '/post/:id',
+    url: '/:slug',
     schema: getOnePostSchema,
     handler: postController.getOnePost,
   })
