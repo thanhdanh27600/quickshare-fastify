@@ -7,7 +7,8 @@
     "start": "node dist/server.js",
     "start-pm2": "pm2 start -n quickshare_fastify npm -- start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.ts",
+    "dev-nodemon": "nodemon src/server.ts",
+    "dev": "tsc src/server.ts",
     "build": "tsc"
   },
   "keywords": [],
@@ -15,10 +16,12 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^9.0.1",
+    "amqplib": "^0.10.4",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "fastify": "^4.26.2",
+    "fluent-json-schema": "^4.2.1",
     "pocketbase": "^0.21.2"
   },
   "devDependencies": {

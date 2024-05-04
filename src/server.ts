@@ -7,6 +7,8 @@ import path from 'path';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import ejs from 'ejs';
+import postRouter from './router/post.router';
+import { ERROR500, ERRORS } from './utils/error';
 
 const fastify = Fastify({
   logger: true,
@@ -21,27 +23,19 @@ fastify.register(fastifyView, {
   },
   root: path.join(__dirname, '../views'),
 });
+fastify.setErrorHandler(function (error, request, reply) {
+  // Log error
+  this.log.error(error)
+  // Send error response
+  reply.status(ERROR500.statusCode).send(ERROR500.message)
+})
+
+// Routes
+fastify.register(postRouter, { prefix: '/api/post' })
 
 fastify.get('/', async (request, reply) => {
   return reply.view('index.ejs', { message: 'Hello, World!' });
 });
-
-fastify.get('/post', async function (request: FastifyRequest, reply) {
-    const query = request.query as {};
-    const title = query['title'];
-    const slug = query['slug'];
-    const resultList = await pb.collection('post').getList(1, 10, {
-        filter: clsx({
-            [`title~"${title}"`]: !!title
-        }, {
-            [`&&slug~"${slug}"`]: !!slug
-        }),
-        expand: 'thumbnail',
-        fields: 'id,slug,title,expand.thumbnail.id,expand.thumbnail.file',
-    });
-    reply.send(resultList);
-});
-
 
 fastify.get('/post/:id', async function (request, reply) {
     const params = request.params as {};
