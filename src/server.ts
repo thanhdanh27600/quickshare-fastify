@@ -36,7 +36,7 @@ fastify.register(postRouter, { prefix: '/api/post' })
 // Views
 fastify.get('/', async (request, reply) => {
   return reply.view('index.ejs', {
-   message: `Hello, Quickshare fam! (${request.ip})`,
+   message: `Hello, Quickshare fam! (${request.headers['x-forwarded-for'] || request.socket.remoteAddress})`,
    BASE_URL });
 });
 
