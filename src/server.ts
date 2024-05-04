@@ -37,11 +37,11 @@ fastify.post('/api/deploy/:secret', async (request, reply) => {
   const rs = await fetch(DEPLOY_URL,
     {
       headers: {
-        'Authorization': `Bearer ${secret}`
+        'Authorization': `Bearer ${atob(secret)}`
       }
     })
   const data = await rs.json();
-  return reply.send(data)
+  return reply.status(rs.status).send(data)
 })
 
 fastify.listen({
