@@ -32,9 +32,8 @@ fastify.get('/', async (request, reply) => {
   return reply.view('index.ejs', { message: 'Hello, World!' });
 });
 
-fastify.post('/api/deploy', async (request, reply) => {
-  let body = request.body;
-  const secret = (body)['hook']?.['config']?.['secret'];
+fastify.post('/api/deploy/:secret', async (request, reply) => {
+  let secret = request.params['secret'];
   const rs = await fetch(DEPLOY_URL,
     {
       headers: {
