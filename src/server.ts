@@ -1,14 +1,12 @@
-import clsx from 'clsx';
-import { pb } from './pocketbase';
-import Fastify, { FastifyInstance, FastifyRequest } from 'fastify'
-import { DEPLOY_AUTH, DEPLOY_URL, PORT } from './utils/config';
-import cors from '@fastify/cors'
-import path from 'path';
+import cors from '@fastify/cors';
 import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import ejs from 'ejs';
+import Fastify from 'fastify';
+import path from 'path';
+import { pb } from './pocketbase';
 import postRouter from './router/post.router';
-import { ERROR500, ERRORS } from './utils/error';
+import { DEPLOY_URL, PORT } from './utils/config';
 
 const fastify = Fastify({
   logger: true,
