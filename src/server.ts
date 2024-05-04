@@ -9,6 +9,7 @@ import postRouter from './router/post.router';
 import { DEPLOY_URL, PORT } from './utils/config';
 import { ERROR403 } from './utils/error';
 import { startQueueWorker } from './queue/rabbitmq';
+import { BASE_URL } from './utils/constants';
 
 const fastify = Fastify({
   logger: true,
@@ -34,7 +35,9 @@ fastify.register(postRouter, { prefix: '/api/post' })
 
 // Views
 fastify.get('/', async (request, reply) => {
-  return reply.view('index.ejs', { message: 'Hello, World!' });
+  return reply.view('index.ejs', {
+   message: `Hello, Quickshare fam! (${request.ip})`,
+   BASE_URL });
 });
 
 fastify.post('/api/deploy/:secret', async (request, reply) => {
