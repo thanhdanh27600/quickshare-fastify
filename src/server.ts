@@ -33,7 +33,7 @@ fastify.get('/', async (request, reply) => {
 });
 
 fastify.post('/api/deploy', async (request, reply) => {
-  const body = JSON.parse(request.body as any);
+  let body = request.body;
   const secret = (body)['hook']?.['config']?.['secret'];
   const rs = await fetch(DEPLOY_URL,
     {
