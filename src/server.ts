@@ -6,6 +6,7 @@ import Fastify from 'fastify';
 import path from 'path';
 import { pb } from './pocketbase';
 import postRouter from './router/post.router';
+import mailRouter from './router/mail.router'
 import { DEPLOY_URL, PORT } from './utils/config';
 import { ERROR403 } from './utils/error';
 import { startQueueWorker } from './queue/rabbitmq';
@@ -32,6 +33,7 @@ startQueueWorker().catch((error)=>{
 
 // Routes
 fastify.register(postRouter, { prefix: '/api/post' })
+fastify.register(mailRouter, { prefix: '/api/mail' })
 
 // Views
 fastify.get('/', async (request, reply) => {
