@@ -10,11 +10,13 @@ import { BASE_URL } from "../utils/constants";
 const emailTemplate = fs.readFileSync(path.join(__dirname, '../../views/mail/test.ejs'), 'utf8');
 
 export const sendTest = async (request: FastifyRequest, reply: FastifyReply) => {
-  const renderedTemplate = ejs.render(emailTemplate, { BASE_URL });
+  const query = request.query;
+  const receiver = query['to'] || 'thanhdanh27600@gmail.com'
+  const renderedTemplate = ejs.render(emailTemplate, { BASE_URL, receiver});
   const mailOptions = {
     from: process.env.EMAIL_FROM,
-    to: 'thanhdanh27600@gmail.com',
-    subject: 'Quickshare digest',
+    to: receiver,
+    subject: 'Quickshare Digest',
     html: renderedTemplate,
   };
 
