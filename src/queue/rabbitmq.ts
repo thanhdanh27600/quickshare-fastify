@@ -47,10 +47,15 @@ export const startQueueWorker = async (): Promise<void> => {
   channel.bindQueue(queue, exchangeName, '');
 
   channel.consume(queue, (message) => {
-    const notification = JSON.parse(message.content.toString());
-    console.log('Received notification:', notification);
-    // Handle the notification as needed
-    channel.ack(message);
+    try {
+      const notification = message.content.toString()
+      console.log('Received notification:', notification);
+      // Handle the notification as needed
+      channel.ack(message);
+    } catch (error) {
+      console.error('Consumer erorr',error)
+    }
+   
   });
 
   console.log('Worker started');
