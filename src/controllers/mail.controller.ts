@@ -27,4 +27,22 @@ export const sendTest = async (request: FastifyRequest, reply: FastifyReply) => 
 }
 
 
+export const notice = async (request: FastifyRequest, reply: FastifyReply) => {
+  const body = request.body;
+  const receiver = body['to'];
+  const renderedTemplate = ejs.render(emailTemplate, { BASE_URL, receiver});
+  const mailOptions = {
+    from: process.env.EMAIL_FROM,
+    to: receiver,
+    subject: 'Notice',
+    html: renderedTemplate,
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log('Email sent:', info.messageId);
+
+  return reply.send({ success: true, messageId: info.messageId });
+}
+
+
 export const mailController = { sendTest }
