@@ -23,6 +23,9 @@ fastify.register(fastifyView, {
 	},
 	root: path.join(__dirname, "../views"),
 });
+fastify.register(import("@fastify/rate-limit"), {
+	global: false, // don't apply these settings to all the routes of the context
+});
 
 // Queue
 // startQueueWorker().catch((error)=>{

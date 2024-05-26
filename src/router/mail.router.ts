@@ -14,6 +14,12 @@ async function mailRouter(fastify: FastifyInstance) {
 		method: "post",
 		url: "/notice",
 		schema: mailNoticeSchema,
+		config: {
+			rateLimit: {
+				max: 10,
+				timeWindow: "1 minute",
+			},
+		},
 		handler: mailController.notice,
 	});
 }
