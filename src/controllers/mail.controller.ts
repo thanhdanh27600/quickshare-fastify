@@ -1,6 +1,7 @@
 import * as ejs from "ejs";
 import {FastifyReply, FastifyRequest} from "fastify";
 import * as fs from "fs";
+import {Options} from "nodemailer/lib/mailer";
 import path from "path";
 import {transporter} from "../nodemailer";
 import {BASE_URL, MAIL_HEADER} from "../utils/constants";
@@ -38,14 +39,16 @@ export const sendTest = async (
 export const notice = async (request: FastifyRequest, reply: FastifyReply) => {
 	const body = request.body;
 	const receiver = body["mailto"];
-	// const preview = body["preview"];
-	// const renderedTemplate = ejs.render(amanahTemplate, {BASE_URL, receiver});
-	// if (preview === true) return reply.send(renderedTemplate);
-	const mailOptions = {
+
+	const preview = body["preview"];
+	const renderedTemplate = ejs.render(amanahTemplate, {BASE_URL, receiver});
+	if (preview === true) return reply.send(renderedTemplate);
+
+	const mailOptions: Options = {
 		from: process.env.EMAIL_FROM,
 		to: receiver,
 		subject: "Notice",
-		html: JSON.stringify(request.body),
+		html: renderedTemplate,
 	};
 	console.log("mailOptions", mailOptions);
 	const creds = {
