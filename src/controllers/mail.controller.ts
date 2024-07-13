@@ -4,6 +4,7 @@ import * as fs from "fs";
 import {Options} from "nodemailer/lib/mailer";
 import path from "path";
 import {transporter} from "../nodemailer";
+import {EMAIL_FROM} from "../utils/config";
 import {BASE_URL, MAIL_HEADER} from "../utils/constants";
 
 const emailTemplate = fs.readFileSync(
@@ -45,12 +46,12 @@ export const notice = async (request: FastifyRequest, reply: FastifyReply) => {
 	if (preview === true) return reply.send(renderedTemplate);
 
 	const mailOptions: Options = {
-		from: process.env.EMAIL_FROM,
+		from: EMAIL_FROM,
 		to: receiver,
 		subject: "Notice",
 		html: renderedTemplate,
 	};
-	console.log("mailOptions", mailOptions);
+	// console.log("mailOptions", mailOptions);
 	const creds = {
 		client: request.headers[MAIL_HEADER.client],
 		key: request.headers[MAIL_HEADER.key],

@@ -1,13 +1,24 @@
 import * as nodemailer from "nodemailer";
+import {
+	EMAIL_SERVER_HOST,
+	EMAIL_SERVER_PASSWORD,
+	EMAIL_SERVER_PORT,
+	EMAIL_SERVER_USER,
+} from "../utils/config";
+import {isProduction} from "../utils/constants";
 
 // Nodemailer configuration
 export const transporter = nodemailer.createTransport({
-	host: process.env.EMAIL_SERVER_HOST,
-	port: Number(process.env.EMAIL_SERVER_PORT),
+	host: EMAIL_SERVER_HOST,
+	port: EMAIL_SERVER_PORT,
 	auth: {
-		user: process.env.EMAIL_SERVER_USER,
-		pass: process.env.EMAIL_SERVER_PASSWORD,
+		user: EMAIL_SERVER_USER,
+		pass: EMAIL_SERVER_PASSWORD,
 	},
-	debug: true, // show debug output
-	logger: true, // log information in console
+	...(isProduction
+		? {}
+		: {
+				debug: true, // show debug output
+				logger: true, // log information in console
+		  }),
 });
